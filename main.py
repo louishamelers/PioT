@@ -1,5 +1,7 @@
-import config
-from nanogateway import NanoGateway
+import lib.otaa_node as node
+import lib.config as config
+from lib.nanogateway import NanoGateway
+import time
 
 if __name__ == '__main__':
     nanogw = NanoGateway(
@@ -17,3 +19,4 @@ if __name__ == '__main__':
     nanogw.start()
     nanogw._log('You may now press ENTER to enter the REPL')
     input()
+    # node.start()

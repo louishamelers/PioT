@@ -10,6 +10,17 @@
 
 """ LoPy LoRaWAN Nano Gateway. Can be used for both EU868 and US915. """
 
+"""
+I found the issue, we a barely have to change anything in here!
+
+When you create your gateway, use the legacy package forwarder
+and set the GATEWAY_ID in config.py to the hex string you set
+up online (no spaces).
+
+The only thing we changed now is that we specify our region when
+creating the LoRa object.
+"""
+
 import errno
 import machine
 import ubinascii
@@ -324,7 +335,7 @@ class NanoGateway:
 
     def _push_data(self, data):
         token = uos.urandom(2)
-        packet = bytes([PROTOCOL_VERSION]) + token + bytes([PUSH_DATA]) + self.id + data # Modified manually (removed unhexlify from id)
+        packet = bytes([PROTOCOL_VERSION]) + token + bytes([PUSH_DATA]) + ubinascii.unhexlify(self.id) + data # Modified manually (removed unhexlify from id)
         with self.udp_lock:
             try:
                 self.sock.sendto(packet, self.server_ip)
@@ -333,7 +344,7 @@ class NanoGateway:
 
     def _pull_data(self):
         token = uos.urandom(2)
-        packet = bytes([PROTOCOL_VERSION]) + token + bytes([PULL_DATA]) + self.id  # Modified manually (removed unhexlify from id)
+        packet = bytes([PROTOCOL_VERSION]) + token + bytes([PULL_DATA]) + ubinascii.unhexlify(self.id)  # Modified manually (removed unhexlify from id)
         with self.udp_lock:
             try:
                 self.sock.sendto(packet, self.server_ip)
