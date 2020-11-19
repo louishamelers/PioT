@@ -1,9 +1,12 @@
-import lib.otaa_node as node
+import lib.node as node
 import lib.config as config
 from lib.nanogateway import NanoGateway
 import time
+import pycom
 
-if __name__ == '__main__':
+def run_gateway():
+    pycom.heartbeat(False)
+    pycom.rgbled(0x002200)
     nanogw = NanoGateway(
         id=config.GATEWAY_ID,
         frequency=config.LORA_FREQUENCY,
@@ -15,8 +18,13 @@ if __name__ == '__main__':
         ntp_server=config.NTP,
         ntp_period=config.NTP_PERIOD_S
         )
-
     nanogw.start()
-    nanogw._log('You may now press ENTER to enter the REPL')
-    input()
-    # node.start()
+
+def run_node():
+    pycom.heartbeat(False)
+    pycom.rgbled(0x000022)
+    node.start()
+
+if __name__ == '__main__':
+    run_gateway()
+    run_node()
