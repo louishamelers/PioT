@@ -1,30 +1,48 @@
-import lib.node as node
-import lib.config as config
-from lib.nanogateway import NanoGateway
+from network import LoRa
+import socket
 import time
+import ubinascii
 import pycom
 
-def run_gateway():
-    pycom.heartbeat(False)
-    pycom.rgbled(0x002200)
-    nanogw = NanoGateway(
-        id=config.GATEWAY_ID,
-        frequency=config.LORA_FREQUENCY,
-        datarate=config.LORA_GW_DR,
-        ssid=config.WIFI_SSID,
-        password=config.WIFI_PASS,
-        server=config.SERVER,
-        port=config.PORT,
-        ntp_server=config.NTP,
-        ntp_period=config.NTP_PERIOD_S
-        )
-    nanogw.start()
+# set led to red
+pycom.heartbeat(False)
+pycom.rgbled(0x220000)
 
-def run_node():
-    pycom.heartbeat(False)
-    pycom.rgbled(0x000022)
-    node.start()
+lora = LoRa(mode=LoRa.LORAWAN, region=LoRa.EU868)
 
-if __name__ == '__main__':
-    run_gateway()
-    run_node()
+dev_eui = '70B3D5499708041F'
+app_eui = '70B3D57ED0038375'
+app_key = 'BA402B7E1946DBCD4427821EC36F099C'
+
+# join a network using OTAA (Over the Air Activation)
+lora.join(activation=LoRa.OTAA, auth=(dev_eui, app_eui, app_key), timeout=0)
+
+# wait until the module has joined the network
+while not lora.has_joined():
+    time.sleep(2.5)
+    print('Not yet joined...')
+
+# change led to green
+pycom.rgbled(0x002200)
+print('Joined')
+
+# create a LoRa socket
+s = socket.socket(socket.AF_LORA, socket.SOCK_RAW)
+
+# set the LoRaWAN data rate
+s.setsockopt(socket.SOL_LORA, socket.SO_DR, 5)
+
+# make the socket blocking
+# (waits for the data to be sent and for the 2 receive windows to expire)
+s.setblocking(True)
+
+# send some data
+s.send(bytes([0x01, 0x02, 0x03]))
+
+# make the socket non-blocking
+# (because if there's no data received it will block forever...)
+s.setblocking(False)
+
+# get any data received (if any...)
+data = s.recv(64)
+print(data)
