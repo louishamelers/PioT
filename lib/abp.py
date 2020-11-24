@@ -23,17 +23,17 @@ s.setsockopt(socket.SOL_LORA, socket.SO_DR, 0)
 
 # make the socket blocking
 # (waits for the data to be sent and for the 2 receive windows to expire)
-s.setblocking(True)
 
 # send some data
 while True:
+    s.setblocking(True)
     print('sending data')
     s.send(bytes([0x01, 0x02, 0x03]))
+    s.setblocking(False)
     time.sleep(10)
 
 # make the socket non-blocking
 # (because if there's no data received it will block forever...)
-s.setblocking(False)
 
 # get any data received (if any...)
 data = s.recv(64)
