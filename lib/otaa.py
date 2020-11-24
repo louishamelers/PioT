@@ -12,10 +12,10 @@ lora = LoRa(mode=LoRa.LORAWAN, region=LoRa.EU868)
 
 dev_eui = binascii.unhexlify('70B3D5499708041F')
 app_eui = binascii.unhexlify('70B3D57ED0038375')
-app_key = binascii.unhexlify('A6B1EC584A958EF0BCA98EECFAC4AE21')
+app_key = binascii.unhexlify('29AE06AC91EC8991F9DCF16DFD587069')
 
 # join a network using OTAA (Over the Air Activation)
-lora.join(activation=LoRa.OTAA, auth=(dev_eui, app_eui, app_key), timeout=0)
+lora.join(activation=LoRa.OTAA, auth=(dev_eui, app_eui, app_key), timeout=200)
 
 # wait until the module has joined the network
 while not lora.has_joined():
