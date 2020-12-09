@@ -1,5 +1,6 @@
 import gateways.config as config
 import nodes.abp as abp_node
+import bluetooth.bluetooth as bluetooth
 from gateways.nanogateway import NanoGateway
 import pycom
 
@@ -7,6 +8,7 @@ pycom.heartbeat(False)
 
 def run_gateway():
     pycom.rgbled(0x2e0e12)
+    print('Starting Gateway...')
     nanogw = NanoGateway(
         id=config.GATEWAY_ID,
         frequency=config.LORA_FREQUENCY,
@@ -18,14 +20,16 @@ def run_gateway():
         ntp_server=config.NTP,
         ntp_period=config.NTP_PERIOD_S
         )
-
     nanogw.start()
-    nanogw._log('You may now press ENTER to enter the REPL')
-    input()
 
 def run_abp():
     pycom.rgbled(0x123030)
-    print('Starting ABP node...')
+    print('Starting ABP Node...')
     abp_node.start()
 
-run_abp()
+def run_bluetooth():
+    pycom.rgbled(0x000033)
+    print('Starting Bluetooth...')
+    bluetooth.start()
+
+run_bluetooth()

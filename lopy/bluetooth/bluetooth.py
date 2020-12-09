@@ -1,25 +1,18 @@
 from network import Bluetooth
 import ubinascii
-import pycom
+import time
 
-bluetooth = Bluetooth()
-pycom.heartbeat(False)
+def conn_cb (bt_o):
+    events = bt_o.events()   # this method returns the flags and clears the internal registry
+    if events & Bluetooth.CLIENT_CONNECTED:
+        print("Client connected")
+    elif events & Bluetooth.CLIENT_DISCONNECTED:
+        print("Client disconnected")
 
-# scan until we can connect to any BLE device around
-pycom.rgbled(0x440000)
-bluetooth.start_scan(-1)
-adv = None
-while True:
-    adv = bluetooth.get_adv()
-    if adv:
-        try:
-            pycom.rgbled(0x000044)
-            bluetooth.connect(adv.mac)
-        except:
-            # start scanning again
-            pycom.rgbled(0x440000)
-            bluetooth.start_scan(-1)
-            continue
-        break
-pycom.rgbled(0x004400)
-print("Connected to device with addr = {}".format(ubinascii.hexlify(adv.mac)))
+def start():
+    bluetooth = Bluetooth()
+    bluetooth.set_advertisement(name='LoPy', service_uuid=b'1234567890123456')
+
+    bluetooth.callback(trigger=Bluetooth.CLIENT_CONNECTED | Bluetooth.CLIENT_DISCONNECTED, handler=conn_cb)
+
+    bluetooth.advertise(True)
