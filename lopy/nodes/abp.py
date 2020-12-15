@@ -9,9 +9,13 @@ def start():
     lora = LoRa(mode=LoRa.LORAWAN, region=LoRa.EU868)
 
     # create an ABP authentication params
-    dev_addr = struct.unpack(">l", ubinascii.unhexlify('26013FC6'))[0]
-    nwk_swkey = ubinascii.unhexlify('7BE1D966D1BEAE00E32E99618B740070')
-    app_swkey = ubinascii.unhexlify('F1C6F9333F6BBDD08A259538277F7EFA')
+    # dev_addr = struct.unpack(">l", ubinascii.unhexlify('26013FC6'))[0]
+    # nwk_swkey = ubinascii.unhexlify('7BE1D966D1BEAE00E32E99618B740070')
+    # app_swkey = ubinascii.unhexlify('F1C6F9333F6BBDD08A259538277F7EFA')
+
+    dev_addr = struct.unpack(">l", ubinascii.unhexlify('26013236'))[0]
+    nwk_swkey = ubinascii.unhexlify('7306831FAFBC7E425DD97A652E90B86D')
+    app_swkey = ubinascii.unhexlify('732AD2ADB38C5038442C537A121BA88D')
 
     # join a network using ABP (Activation By Personalisation)
     lora.join(activation=LoRa.ABP, auth=(dev_addr, nwk_swkey, app_swkey))
@@ -37,7 +41,7 @@ def start():
     """ Your own code can be written below! """
 
     while True:
-        data = b"TOM" + bytes([0x01, 0x02, 0x03])
+        data = b"LOUIS" + bytes([0x01, 0x02, 0x03])
         print('Sending:', data)
         s.send(data)
         time.sleep(4)

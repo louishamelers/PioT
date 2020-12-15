@@ -1,9 +1,9 @@
-import gateways.config as config
+import gateways.nanogateway as config
 import nodes.abp as abp_node
 from gateways.nanogateway import NanoGateway
 import pycom
 
-pycom.heartbeat(False)
+pycom.heartbeat(True)
 
 def run_gateway():
     pycom.rgbled(0x2e0e12)
