@@ -15,6 +15,7 @@ if __name__ == "__main__":
         nwk_swkey=config.nwk_swkey,
         app_swkey=config.app_swkey,
         get_data=get_data,
-        encode=encode
+        encode=encode,
+        interval=20
     )
     node.start()

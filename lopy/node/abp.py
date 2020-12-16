@@ -47,12 +47,15 @@ class ABPNode:
         while (self.running):
             # Get data from sensors...
             data = self.get_data()
-            encoded_data = self.encode(data)
+            print(data)
+            data_encoded = self.encode(data)
 
             # Send data to gateway
             s.setblocking(False)
-            print('Sending:', encoded_data)
-            s.send(encoded_data)
+            print('Sending data:')
+            print('Decoded:', data)
+            print('Encoded:', data_encoded)
+            s.send(data_encoded)
             s.setblocking(True)
 
             # Wait n minutes
