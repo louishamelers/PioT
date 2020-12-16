@@ -1,6 +1,9 @@
 from abp import ABPNode
+from encoder import encode
+from sensor import get_data
 import config
 import pycom
+
 
 if __name__ == "__main__":
     pycom.heartbeat(False)
@@ -11,6 +14,7 @@ if __name__ == "__main__":
         dev_addr=config.dev_addr,
         nwk_swkey=config.nwk_swkey,
         app_swkey=config.app_swkey,
-        interval=5
+        get_data=get_data,
+        encode=encode
     )
     node.start()

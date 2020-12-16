@@ -4,18 +4,11 @@ import ubinascii
 import struct
 import time
 
-def encode(data):
-    encoded = b''
-
-    # E.g. (10.43) => (1043) => (04 13)
-    encoded += struct.pack('>h', round(data['humidity'] * 100))
-    # E.g. (-2.43) => (-243) => (FF 0E)
-    encoded += struct.pack('>h', round(data['temperature'] * 100))
-    
-    return encoded
 
 class ABPNode:
-    def __init__(self, dev_addr, nwk_swkey, app_swkey, interval=10):
+    def __init__(self, dev_addr, nwk_swkey, app_swkey, get_data, encode, interval=10):
+        self.get_data = get_data
+        self.encode = encode
         self.interval = interval
 
         # Initialise LoRa in LORAWAN mode.
@@ -28,7 +21,8 @@ class ABPNode:
         self.app_swkey = ubinascii.unhexlify(app_swkey)
 
         # join a network using ABP (Activation By Personalisation)
-        lora.join(activation=LoRa.ABP, auth=(self.dev_addr, self.nwk_swkey, self.app_swkey))
+        lora.join(activation=LoRa.ABP, auth=(
+            self.dev_addr, self.nwk_swkey, self.app_swkey))
 
         # remove all the non-default channels
         for i in range(3, 16):
@@ -45,23 +39,20 @@ class ABPNode:
 
         # set the LoRaWAN data rate
         s.setsockopt(socket.SOL_LORA, socket.SO_DR, 5)
-    
+
     def start(self):
         s = self.socket
         self.running = True
 
         while (self.running):
             # Get data from sensors...
-            measurements = {
-                'humidity': 10.43,
-                'temperature': -12.11
-            }
-            data = encode(measurements)
+            data = self.get_data()
+            encoded_data = self.encode(data)
 
             # Send data to gateway
             s.setblocking(False)
-            print('Sending:', data)
-            s.send(data)
+            print('Sending:', encoded_data)
+            s.send(encoded_data)
             s.setblocking(True)
 
             # Wait n minutes
