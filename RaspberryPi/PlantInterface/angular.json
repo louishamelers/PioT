@@ -126,5 +126,8 @@
       }
     }
   },
-  "defaultProject": "PlantInterface"
+  "defaultProject": "PlantInterface",
+  "cli": {
+    "analytics": "472f68ad-7003-49f0-af4c-0fffebe56e80"
+  }
 }
