@@ -6,9 +6,8 @@ import time
 
 
 class ABPNode:
-    def __init__(self, dev_addr, nwk_swkey, app_swkey, get_data, encode, interval=10):
-        self.get_data = get_data
-        self.encode = encode
+    def __init__(self, dev_addr, nwk_swkey, app_swkey, data_source, interval=10):
+        self.data_source = data_source
         self.interval = interval
 
         # Initialise LoRa in LORAWAN mode.
@@ -46,16 +45,12 @@ class ABPNode:
 
         while (self.running):
             # Get data from sensors...
-            data = self.get_data()
-            print(data)
-            data_encoded = self.encode(data)
+            data = self.data_source.get_encoded_data()
 
             # Send data to gateway
             s.setblocking(False)
-            print('Sending data:')
-            print('Decoded:', data)
-            print('Encoded:', data_encoded)
-            s.send(data_encoded)
+            print('Sending data:', data)
+            s.send(data)
             s.setblocking(True)
 
             # Wait n minutes
