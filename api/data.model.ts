@@ -1,4 +1,4 @@
-export interface Data {
+export interface Payload {
   temperature: number;
   humidity: number;
   soilMoisture: number;

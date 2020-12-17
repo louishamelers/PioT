@@ -69,14 +69,7 @@ export class SensorGraphComponent implements OnInit, OnDestroy {
   public type: ChartType = 'line';
   @ViewChild(BaseChartDirective, { static: true }) chart: BaseChartDirective;
 
-
-  private subscription: Subscription;
-  topicname: any;
-  msg: any;
-  isConnected = false;
-  // @ViewChild('msglog', { static: true }) msglog: ElementRef;
-
-  constructor(private mqttService: MqttService) { }
+  constructor() { }
 
   ngOnInit(): void {
     // this.subscribeNewTopic();
@@ -84,31 +77,6 @@ export class SensorGraphComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     // this.subscription.unsubscribe();
-  }
-
-
-  subscribeNewTopic(): void {
-    console.log('inside subscribe new topic');
-    this.subscription = this.mqttService.observe('iot-plant-solution/devices/lopy-tom/up').subscribe((message: IMqttMessage) => {
-      // this.msg = message;
-      console.log('msg: ', message);
-      // this.logMsg('Message: ' + message.payload.toString() + '<br> for topic: ' + message.topic);
-    });
-    // this.logMsg('subscribed to topic: ' + this.topicname);
-  }
-
-  // sendmsg(): void {
-  //   // use unsafe publish for non-ssl websockets
-  //   this.mqttService.unsafePublish(this.topicname, this.msg, { qos: 1, retain: true });
-  //   this.msg = '';
-  // }
-
-  logMsg(message): void {
-    // this.msglog.nativeElement.innerHTML += '<br><hr>' + message;
-  }
-
-  clear(): void {
-    // this.msglog.nativeElement.innerHTML = '';
   }
 
 }

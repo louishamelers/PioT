@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
-import { map } from 'rxjs/operators';
-import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
+import {Component} from '@angular/core';
+import {map} from 'rxjs/operators';
+import {Breakpoints, BreakpointObserver} from '@angular/cdk/layout';
+import * as io from 'socket.io-client';
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'app-dashboard',
@@ -9,5 +11,13 @@ import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
 })
 export class DashboardComponent {
 
-  constructor() {}
+  socket: any;
+  readonly uri: string = 'localhost:3000';
+
+  constructor() {
+    this.socket = io.io(this.uri);
+    this.socket.on('test event', data => {
+      console.log(data);
+    });
+  }
 }

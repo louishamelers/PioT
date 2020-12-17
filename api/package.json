@@ -1,0 +1,15 @@
+{
+  "name": "plant-interface-api",
+  "version": "1.0.0",
+  "description": "plant interface node api",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "mqtt": "^4.2.6",
+    "socket.io": "^3.0.4"
+  }
+}
