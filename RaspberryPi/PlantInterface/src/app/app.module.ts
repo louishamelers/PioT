@@ -16,15 +16,6 @@ import {ChartsModule} from 'ng2-charts';
 import { SensorGraphComponent } from './cards/sensor-graph/sensor-graph.component';
 import {IMqttServiceOptions, MqttModule} from 'ngx-mqtt';
 
-export const MQTT_SERVICE_OPTIONS: IMqttServiceOptions = {
-  connectOnCreate: true,
-  hostname: 'eu.thethings.network',
-  port: 8883,
-  path: '/mqtt',
-  protocol: 'ws',
-  // username: 'iot-plant-solution',
-  // password: 'ttn-account-v2.BmgSn0RYmHUlyNtJ79Ew73sTfoW4qgIG8db_cWuhWwM'
-};
 
 @NgModule({
   declarations: [
@@ -43,8 +34,7 @@ export const MQTT_SERVICE_OPTIONS: IMqttServiceOptions = {
     MatIconModule,
     MatButtonModule,
     LayoutModule,
-    ChartsModule,
-    MqttModule.forRoot(MQTT_SERVICE_OPTIONS)
+    ChartsModule
   ],
   providers: [
   ],
