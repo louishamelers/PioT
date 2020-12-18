@@ -29,7 +29,8 @@ export class DataService {
   }
 
   constructor() {
-    const socket = io.io('localhost:3000');
+    // todo config file
+    const socket = io.io('192.168.1.100:3000');
 
     socket.on('sensor-data', rawData => {
       // add data to rawData

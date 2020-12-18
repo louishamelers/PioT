@@ -3,7 +3,7 @@ import {ChartDataSets, ChartOptions, ChartType} from 'chart.js';
 import {BaseChartDirective, Color, Label} from 'ng2-charts';
 import {Observable, Subscription} from 'rxjs';
 import * as io from 'socket.io-client';
-import {DataService} from '../../services/data.service';
+import {DataService} from '../services/data.service';
 
 const CHART_OPTIONS: ChartOptions = {
   legend: {
