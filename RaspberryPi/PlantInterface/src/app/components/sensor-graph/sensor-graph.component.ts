@@ -3,7 +3,7 @@ import {ChartDataSets, ChartOptions, ChartType} from 'chart.js';
 import {BaseChartDirective, Color, Label} from 'ng2-charts';
 import {Observable, Subscription} from 'rxjs';
 import * as io from 'socket.io-client';
-import {DataService} from '../services/data.service';
+import {DataService} from '../../services/data.service';
 
 const CHART_OPTIONS: ChartOptions = {
   legend: {
@@ -16,7 +16,8 @@ const CHART_OPTIONS: ChartOptions = {
     yAxes: [{
       display: false
     }]
-  }
+  },
+  aspectRatio: 3
 };
 
 @Component({
@@ -27,13 +28,31 @@ const CHART_OPTIONS: ChartOptions = {
 export class SensorGraphComponent {
   @ViewChild(BaseChartDirective, {static: true}) chart: BaseChartDirective;
   public chartData: ChartDataSets[] = [
-    {data: []},
-    {data: []},
-    {data: []},
-    {data: []},
+    {
+      data: [],
+      fill: false
+    },
+    {
+      data: [],
+      fill: false
+    },
+    {
+      data: [],
+      fill: false
+    },
+    {
+      data: [],
+      fill: false
+    },
   ];
   public chartLabels = [];
   public chartOptions = CHART_OPTIONS;
+  public chartColors: Color[] = [
+    {borderColor: '#0B3954'},
+    {borderColor: '#BFD7EA'},
+    {borderColor: '#FF6663'},
+    {borderColor: '#E0FF4F'},
+  ];
 
   constructor(private dataService: DataService) {
     dataService.sensorData.subscribe(data => {

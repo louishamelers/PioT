@@ -1,0 +1,49 @@
+:host {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 0 16px;
+  border-bottom: solid 1px #d9d9d9;
+}
+
+.sensor-label {
+  padding: 8px;
+  margin: 16px;
+  border: solid 1px #d9d9d9;
+  width: 130px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+
+  .marker {
+    width: 20px;
+    height: 40px;
+    border-radius: 4px;
+    margin-right: 8px;
+  }
+
+  .label-text {
+    display: flex;
+    flex-direction: column;
+
+    P {
+      margin: 0;
+    }
+  }
+
+  &.humidity > .marker {
+    background-color: #0B3954;
+  }
+
+  &.light > .marker {
+    background-color: #BFD7EA;
+  }
+
+  &.soil-moisture > .marker {
+    background-color: #FF6663;
+  }
+
+  &.temperature > .marker {
+    background-color: #E0FF4F;
+  }
+}

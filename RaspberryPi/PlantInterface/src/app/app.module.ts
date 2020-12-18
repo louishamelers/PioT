@@ -4,7 +4,6 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { DashboardComponent } from './dashboard/dashboard.component';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCardModule } from '@angular/material/card';
 import { MatMenuModule } from '@angular/material/menu';
@@ -12,16 +11,23 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { LayoutModule } from '@angular/cdk/layout';
 import {ChartsModule} from 'ng2-charts';
-import { SensorGraphComponent } from './sensor-graph/sensor-graph.component';
+import { SensorGraphComponent } from './components/sensor-graph/sensor-graph.component';
+import { HeaderComponent } from './components/header/header.component';
+import { LabelsComponent } from './components/labels/labels.component';
+import {CommonModule} from '@angular/common';
+import { StatusComponent } from './components/status/status.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    DashboardComponent,
-    SensorGraphComponent
+    SensorGraphComponent,
+    HeaderComponent,
+    LabelsComponent,
+    StatusComponent
   ],
   imports: [
+    CommonModule,
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
