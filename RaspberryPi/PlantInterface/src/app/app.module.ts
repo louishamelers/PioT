@@ -14,7 +14,6 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { BasicGraphComponent } from './cards/basic-graph/basic-graph.component';
 import {ChartsModule} from 'ng2-charts';
 import { SensorGraphComponent } from './cards/sensor-graph/sensor-graph.component';
-import {IMqttServiceOptions, MqttModule} from 'ngx-mqtt';
 
 
 @NgModule({

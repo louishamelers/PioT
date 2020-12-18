@@ -20,8 +20,10 @@ client.on('connect', function () {
 })
 
 client.on('message', function (topic, message) {
-  payload = JSON.parse(message.toString()).payload_fields;
-  io.emit('test event', payload);
+  // io.emit('sensor-data', JSON.parse(message.toString()));
+  setInterval(function() {
+    io.emit('sensor-data', JSON.parse(message.toString()));
+  }, 1000)
 })
 
 io.on('connection', function() {

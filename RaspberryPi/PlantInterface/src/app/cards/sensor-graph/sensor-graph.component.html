@@ -1,8 +1,8 @@
-<div class="flex-item">
+<div class="flex-item" style="overflow: scroll">
   <canvas baseChart
-          [datasets]="data"
-          [labels]="labels"
-          [options]="options"
-          [colors]="colors"
-          [chartType]="type"></canvas>
+          [datasets]="chartData"
+          [labels]="chartLabels"
+          [options]="chartOptions"
+          [chartType]="'line'"
+  style="width: 1000px"></canvas>
 </div>

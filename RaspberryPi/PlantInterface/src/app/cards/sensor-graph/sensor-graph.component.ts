@@ -1,82 +1,50 @@
 import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ChartDataSets, ChartOptions, ChartType} from 'chart.js';
 import {BaseChartDirective, Color, Label} from 'ng2-charts';
-import {IMqttMessage, MqttService} from 'ngx-mqtt';
-import {Subscription} from 'rxjs';
+import {Observable, Subscription} from 'rxjs';
+import * as io from 'socket.io-client';
+import {DataService} from '../../services/data.service';
+
+const CHART_OPTIONS: ChartOptions = {
+  legend: {
+    display: false
+  },
+  animation: {
+    duration: 0
+  },
+  scales: {
+    yAxes: [{
+      display: false
+    }]
+  }
+};
 
 @Component({
   selector: 'app-sensor-graph',
   templateUrl: './sensor-graph.component.html',
   styleUrls: ['./sensor-graph.component.scss']
 })
-export class SensorGraphComponent implements OnInit, OnDestroy {
-  public data: ChartDataSets[] = [
-    { data: [65, 59, 80, 81, 56, 55, 40]}
+export class SensorGraphComponent {
+  @ViewChild(BaseChartDirective, {static: true}) chart: BaseChartDirective;
+  public chartData: ChartDataSets[] = [
+    {data: []},
+    {data: []},
+    {data: []},
+    {data: []},
   ];
-  public labels: Label[] = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
-  public options: (ChartOptions & { annotation: any }) = {
-    legend: {
-      display: false
-    },
-    scales: {
-      // We use this empty structure as a placeholder for dynamic theming.
-      xAxes: [{}],
-      yAxes: [
-        {
-          id: 'y-axis-0',
-          position: 'left',
-        },
-        {
-          id: 'y-axis-1',
-          position: 'right',
-          // gridLines: {
-          //   color: 'rgba(255,0,0,0.3)',
-          // },
-          // ticks: {
-          //   fontColor: 'red',
-          // }
-        }
-      ]
-    },
-    annotation: {
-      // annotations: [
-      //   {
-      //     type: 'line',
-      //     mode: 'vertical',
-      //     scaleID: 'x-axis-0',
-      //     value: 'March',
-      //     borderColor: 'orange',
-      //     borderWidth: 2,
-      //     label: {
-      //       enabled: true,
-      //       fontColor: 'orange',
-      //       content: 'LineAnno'
-      //     }
-      //   },
-      // ],
-    },
-  };
-  public colors: Color[] = [
-    { // grey
-      backgroundColor: 'rgba(148,159,177,0.2)',
-      borderColor: 'rgba(148,159,177,1)',
-      pointBackgroundColor: 'rgba(148,159,177,1)',
-      pointBorderColor: '#fff',
-      pointHoverBackgroundColor: '#fff',
-      pointHoverBorderColor: 'rgba(148,159,177,0.8)'
-    }
-  ];
-  public type: ChartType = 'line';
-  @ViewChild(BaseChartDirective, { static: true }) chart: BaseChartDirective;
+  public chartLabels = [];
+  public chartOptions = CHART_OPTIONS;
 
-  constructor() { }
+  constructor(private dataService: DataService) {
+    dataService.sensorData.subscribe(data => {
+      // set chartData
+      this.chartData[0].data = data.humidity;
+      this.chartData[1].data = data.light;
+      this.chartData[2].data = data.soilMoisture;
+      this.chartData[3].data = data.temperature;
 
-  ngOnInit(): void {
-    // this.subscribeNewTopic();
+      // set chart labels
+      this.chartLabels = data.time;
+    });
   }
-
-  ngOnDestroy(): void {
-    // this.subscription.unsubscribe();
-  }
-
 }
