@@ -16,6 +16,7 @@ import { HeaderComponent } from './components/header/header.component';
 import { LabelsComponent } from './components/labels/labels.component';
 import {CommonModule} from '@angular/common';
 import { StatusComponent } from './components/status/status.component';
+import {NotationPipe} from './pipes/notation.pipe';
 
 
 @NgModule({
@@ -24,7 +25,8 @@ import { StatusComponent } from './components/status/status.component';
     SensorGraphComponent,
     HeaderComponent,
     LabelsComponent,
-    StatusComponent
+    StatusComponent,
+    NotationPipe
   ],
   imports: [
     CommonModule,

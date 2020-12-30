@@ -3,7 +3,7 @@
     <div class="marker"></div>
     <div class="label-text">
       <p>{{label.name | titlecase}}:</p>
-      <p *ngIf="label.value">{{label.value.toString() | slice:0:4}}</p>
+      <p *ngIf="label.value">{{label.value.toString() | slice:0:4}} {{label.name | notation}}</p>
       <p *ngIf="!label.value">--</p>
     </div>
   </div>

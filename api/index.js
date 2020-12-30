@@ -24,10 +24,10 @@ client.on('message', function (topic, message) {
   const jsonMessage = JSON.parse(message.toString());
   jsonMessage['status'] = 'needs watering';
   io.emit('sensor-data', jsonMessage);
-  // setInterval(function() {
-  //   jsonMessage['metadata']['time'] = new Date();
-  //   io.emit('sensor-data', jsonMessage);
-  // }, 30000)
+  setInterval(function() {
+    jsonMessage['metadata']['time'] = new Date();
+    io.emit('sensor-data', jsonMessage);
+  }, 3000)
 })
 
 io.on('connection', function() {
