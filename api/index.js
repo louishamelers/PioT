@@ -21,9 +21,13 @@ client.on('connect', function () {
 
 client.on('message', function (topic, message) {
   // io.emit('sensor-data', JSON.parse(message.toString()));
-  setInterval(function() {
-    io.emit('sensor-data', JSON.parse(message.toString()));
-  }, 1000)
+  const jsonMessage = JSON.parse(message.toString());
+  jsonMessage['status'] = 'needs watering';
+  io.emit('sensor-data', jsonMessage);
+  // setInterval(function() {
+  //   jsonMessage['metadata']['time'] = new Date();
+  //   io.emit('sensor-data', jsonMessage);
+  // }, 30000)
 })
 
 io.on('connection', function() {

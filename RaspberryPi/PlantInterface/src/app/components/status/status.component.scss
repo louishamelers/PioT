@@ -1,0 +1,19 @@
+:host {
+  padding: 0 32px 0 32px;
+  display: flex;
+  align-items: center;
+  justify-items: center;
+  justify-content: center;
+  border-left: solid 1px #d9d9d9;
+}
+
+.plant-icon {
+  width: 52px;
+  height: 52px;
+  margin-right: 24px;
+}
+
+.status-text {
+  color: grey;
+  margin: 0;
+}

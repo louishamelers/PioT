@@ -36,15 +36,15 @@ export class DataService {
       // add data to rawData
       const timeFormat = new Date(rawData.metadata.time);
       this.data.time.push(`${timeFormat.getUTCHours()}:${timeFormat.getMinutes()}`);
-      // this.data.humidity.push(rawData.payload_fields.humidity);
-      // this.data.light.push(rawData.payload_fields.light);
-      // this.data.soilMoisture.push(rawData.payload_fields.soilMoisture);
-      // this.data.temperature.push(rawData.payload_fields.temperature);
+      this.data.humidity.push(rawData.payload_fields.humidity);
+      this.data.light.push(rawData.payload_fields.light);
+      this.data.soilMoisture.push(rawData.payload_fields.soilMoisture);
+      this.data.temperature.push(rawData.payload_fields.temperature);
 
-      this.data.humidity.push(Math.random());
-      this.data.light.push(Math.random());
-      this.data.soilMoisture.push(Math.random());
-      this.data.temperature.push(Math.random());
+      // this.data.humidity.push(Math.random());
+      // this.data.light.push(Math.random());
+      // this.data.soilMoisture.push(Math.random());
+      // this.data.temperature.push(Math.random());
 
       // trim it
       this.data.time = this.data.time.slice(1, this.bufferSize + 1);
