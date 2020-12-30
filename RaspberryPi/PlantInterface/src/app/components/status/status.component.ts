@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {HealthService} from '../../services/health.service';
 
 @Component({
   selector: 'app-status',
@@ -7,7 +8,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class StatusComponent implements OnInit {
 
-  constructor() { }
+  constructor(public healthService: HealthService) {
+    healthService.plantStatus.subscribe(oke => console.log(oke));
+  }
 
   ngOnInit(): void {
   }

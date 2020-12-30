@@ -1,4 +1,14 @@
-
-
-<img class="plant-icon" src="assets/images/plant-healthy.svg" alt="plant-healthy">
-<p class="status-text">Your plant is looking good!</p>
+<div [ngSwitch]="healthService.plantStatus | async">
+  <div *ngSwitchCase="healthService.healthStatuses.Dry" class="status">
+    <img class="plant-icon" src="assets/images/plant-healthy.svg" alt="plant-healthy">
+    <p class="status-text">Your plant is looking DRY!</p>
+  </div>
+  <div *ngSwitchCase="healthService.healthStatuses.Cold" class="status">
+    <img class="plant-icon" src="assets/images/plant-healthy.svg" alt="plant-healthy">
+    <p class="status-text">Your plant is looking COLD!</p>
+  </div>
+  <div *ngSwitchDefault class="status">
+    <img class="plant-icon" src="assets/images/plant-healthy.svg" alt="plant-healthy">
+    <p class="status-text">Your plant is looking good!</p>
+  </div>
+</div>
