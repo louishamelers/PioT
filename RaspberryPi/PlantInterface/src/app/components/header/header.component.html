@@ -1,7 +1,11 @@
 <div>
   <h1>Welcome to Plant-interface</h1>
   <p>
-    See how your plant is doing. Give him/her/it some love.
+    See how your plant is doing. Give it some love.
   </p>
 </div>
 <app-status></app-status>
+<button mat-button class="option-button">
+  <mat-icon aria-hidden="false" aria-label="Choose a different plant"
+  (click)="openDialog()">tune</mat-icon>
+</button>

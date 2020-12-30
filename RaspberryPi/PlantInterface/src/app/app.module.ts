@@ -17,6 +17,8 @@ import { LabelsComponent } from './components/labels/labels.component';
 import {CommonModule} from '@angular/common';
 import { StatusComponent } from './components/status/status.component';
 import {NotationPipe} from './pipes/notation.pipe';
+import { OptionsComponent } from './components/options/options.component';
+import {MatDialogModule} from '@angular/material/dialog';
 
 
 @NgModule({
@@ -26,7 +28,8 @@ import {NotationPipe} from './pipes/notation.pipe';
     HeaderComponent,
     LabelsComponent,
     StatusComponent,
-    NotationPipe
+    NotationPipe,
+    OptionsComponent
   ],
   imports: [
     CommonModule,
@@ -39,7 +42,8 @@ import {NotationPipe} from './pipes/notation.pipe';
     MatIconModule,
     MatButtonModule,
     LayoutModule,
-    ChartsModule
+    ChartsModule,
+    MatDialogModule
   ],
   providers: [
   ],

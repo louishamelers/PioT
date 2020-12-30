@@ -10,16 +10,18 @@ export enum Status {
   Cold
 }
 
+// todo add plant types and calculations for each, then show in dialog
+
 @Injectable({
   providedIn: 'root'
 })
-export class HealthService {
+export class PlantService {
   private readonly dataSubject: BehaviorSubject<Status> = new BehaviorSubject<Status>(Status.Healthy);
 
   get plantStatus(): Observable<Status> {
     return this.dataSubject.asObservable();
   }
-  public get healthStatuses(): typeof Status {
+  public get statuses(): typeof Status {
     return Status;
   }
 

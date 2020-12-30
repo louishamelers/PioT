@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import {HealthService} from '../../services/health.service';
+import {PlantService} from '../../services/plant.service';
+import {OptionsComponent} from '../options/options.component';
+import {MatDialog} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-status',
@@ -8,11 +10,10 @@ import {HealthService} from '../../services/health.service';
 })
 export class StatusComponent implements OnInit {
 
-  constructor(public healthService: HealthService) {
+  constructor(public healthService: PlantService) {
     healthService.plantStatus.subscribe(oke => console.log(oke));
   }
 
   ngOnInit(): void {
   }
-
 }
