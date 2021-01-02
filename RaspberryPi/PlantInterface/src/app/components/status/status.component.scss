@@ -5,10 +5,6 @@
   justify-items: stretch;
   justify-content: center;
   border-left: solid 1px #d9d9d9;
-
-  >div {
-    height: 100%;
-  }
 }
 
 .plant-icon {
@@ -28,9 +24,16 @@
     padding-right: 8px;
   }
 
-
   .status-text {
     margin: 0 54px 0 8px;
+
+    >p {
+      margin: 0;
+    }
+
+    >p:first-of-type {
+      font-weight: 500;
+    }
   }
 
   &.healthy {
@@ -47,21 +50,7 @@
     }
   }
 
-  &.cold {
-    background-color: #ffdea2;
-    border: solid 1px orange;
-
-    .status-text {
-      color: darkorange;
-    }
-
-    >mat-icon {
-      color: darkorange;
-      border-right: solid 1px darkorange;
-    }
-  }
-
-  &.dry {
+  &.alert {
     background-color: #ffdea2;
     border: solid 1px orange;
 

@@ -1,15 +1,21 @@
 <img class="plant-icon" src="assets/images/plant-healthy.svg" alt="plant-healthy">
-<div [ngSwitch]="plantService.plantStatus | async">
-  <div *ngSwitchCase="plantService.statuses.Dry" class="status dry">
-    <mat-icon aria-hidden="false" aria-label="Choose a different plant">report</mat-icon>
-    <p class="status-text">Your <b>{{(plantService.plantProperties  | async).plantName}}</b> is looking a bit dry!</p>
+<div *ngIf="(plantService.plantStatus | async) !== plantService.healthyStatus"
+     class="status alert">
+  <mat-icon aria-hidden="false" aria-label="Choose a different plant">report</mat-icon>
+  <div class="status-text">
+    <p>
+      Your
+      <b>
+        {{(plantService.plantProperties  | async).plantName}}</b>
+      is looking a bit
+      <b>
+        {{(plantService.plantStatus | async).status}}</b>!
+    </p>
+    <p><i>{{(plantService.plantStatus | async).message}}</i></p>
   </div>
-  <div *ngSwitchCase="plantService.statuses.Cold" class="status cold">
-    <mat-icon aria-hidden="false" aria-label="Choose a different plant">report</mat-icon>
-    <p class="status-text">Your <b>{{(plantService.plantProperties  | async).plantName}}</b> is looking a bit cold!</p>
-  </div>
-  <div *ngSwitchDefault class="status healthy">
-    <mat-icon aria-hidden="false" aria-label="Choose a different plant">health_and_safety</mat-icon>
-    <p class="status-text">Your <b>{{(plantService.plantProperties  | async).plantName}}</b> is looking good!</p>
-  </div>
+</div>
+<div *ngIf="(plantService.plantStatus | async) === plantService.healthyStatus"
+     class="status healthy">
+  <mat-icon aria-hidden="false" aria-label="Choose a different plant">health_and_safety</mat-icon>
+  <p class="status-text">Your <b>{{(plantService.plantProperties  | async).plantName}}</b> is looking good!</p>
 </div>
