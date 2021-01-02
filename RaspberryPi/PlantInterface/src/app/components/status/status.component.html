@@ -1,14 +1,15 @@
+<img class="plant-icon" src="assets/images/plant-healthy.svg" alt="plant-healthy">
 <div [ngSwitch]="plantService.plantStatus | async">
-  <div *ngSwitchCase="plantService.statuses.Dry" class="status">
-    <img class="plant-icon" src="assets/images/plant-healthy.svg" alt="plant-healthy">
-    <p class="status-text">Your <b>{{(plantService.plantProperties  | async).plantName}}</b> is looking DRY!</p>
+  <div *ngSwitchCase="plantService.statuses.Dry" class="status dry">
+    <mat-icon aria-hidden="false" aria-label="Choose a different plant">report</mat-icon>
+    <p class="status-text">Your <b>{{(plantService.plantProperties  | async).plantName}}</b> is looking a bit dry!</p>
   </div>
-  <div *ngSwitchCase="plantService.statuses.Cold" class="status">
-    <img class="plant-icon" src="assets/images/plant-healthy.svg" alt="plant-healthy">
-    <p class="status-text">Your <b>{{(plantService.plantProperties  | async).plantName}}</b> is looking COLD!</p>
+  <div *ngSwitchCase="plantService.statuses.Cold" class="status cold">
+    <mat-icon aria-hidden="false" aria-label="Choose a different plant">report</mat-icon>
+    <p class="status-text">Your <b>{{(plantService.plantProperties  | async).plantName}}</b> is looking a bit cold!</p>
   </div>
-  <div *ngSwitchDefault class="status">
-    <img class="plant-icon" src="assets/images/plant-healthy.svg" alt="plant-healthy">
+  <div *ngSwitchDefault class="status healthy">
+    <mat-icon aria-hidden="false" aria-label="Choose a different plant">health_and_safety</mat-icon>
     <p class="status-text">Your <b>{{(plantService.plantProperties  | async).plantName}}</b> is looking good!</p>
   </div>
 </div>

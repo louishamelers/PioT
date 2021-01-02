@@ -1,10 +1,14 @@
-.status {
+:host {
   padding: 0 16px 0 16px;
   display: flex;
   align-items: center;
-  justify-items: center;
+  justify-items: stretch;
   justify-content: center;
   border-left: solid 1px #d9d9d9;
+
+  >div {
+    height: 100%;
+  }
 }
 
 .plant-icon {
@@ -13,7 +17,61 @@
   margin-right: 24px;
 }
 
-.status-text {
-  color: grey;
-  margin: 0;
+.status {
+  border-radius: 6px;
+  display: flex;
+  padding: 8px;
+  align-items: center;
+  justify-content: center;
+
+  >mat-icon {
+    padding-right: 8px;
+  }
+
+
+  .status-text {
+    margin: 0 54px 0 8px;
+  }
+
+  &.healthy {
+    background-color: lightgreen;
+    border: solid 1px green;
+
+    .status-text {
+      color: darkgreen;
+    }
+
+    >mat-icon {
+      color: darkgreen;
+      border-right: solid 1px darkgreen;
+    }
+  }
+
+  &.cold {
+    background-color: #ffdea2;
+    border: solid 1px orange;
+
+    .status-text {
+      color: darkorange;
+    }
+
+    >mat-icon {
+      color: darkorange;
+      border-right: solid 1px darkorange;
+    }
+  }
+
+  &.dry {
+    background-color: #ffdea2;
+    border: solid 1px orange;
+
+    .status-text {
+      color: darkorange;
+    }
+
+    >mat-icon {
+      color: darkorange;
+      border-right: solid 1px darkorange;
+    }
+  }
 }
