@@ -11,7 +11,7 @@ import {MatDialog} from '@angular/material/dialog';
 export class StatusComponent implements OnInit {
 
   constructor(public healthService: PlantService) {
-    healthService.plantStatus.subscribe(oke => console.log(oke));
+    healthService.plantStatus.subscribe();
   }
 
   ngOnInit(): void {

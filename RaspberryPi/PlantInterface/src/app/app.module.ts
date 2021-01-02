@@ -19,6 +19,7 @@ import { StatusComponent } from './components/status/status.component';
 import {NotationPipe} from './pipes/notation.pipe';
 import { OptionsComponent } from './components/options/options.component';
 import {MatDialogModule} from '@angular/material/dialog';
+import {MatRippleModule} from "@angular/material/core";
 
 
 @NgModule({
@@ -43,7 +44,8 @@ import {MatDialogModule} from '@angular/material/dialog';
     MatButtonModule,
     LayoutModule,
     ChartsModule,
-    MatDialogModule
+    MatDialogModule,
+    MatRippleModule
   ],
   providers: [
   ],

@@ -1,1 +1,7 @@
-lekker!
+<div *ngFor="let plant of plantService.getPlants"
+     class="plant-row"
+     matRipple
+     (click)="plantService.setPlantSubject = plant"
+      matDialogClose>
+  {{plant.plantName}}
+</div>
