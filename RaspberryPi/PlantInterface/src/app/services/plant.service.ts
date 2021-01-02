@@ -59,8 +59,12 @@ export class PlantService {
     return this.healthSubject.asObservable();
   }
 
-  public set setPlantSubject(plant: PlantProperties) {
+  public set plantPropertiesRaw(plant: PlantProperties) {
     this.plantSubject.next(plant);
+  }
+
+  public get plantProperties(): Observable<PlantProperties> {
+    return this.plantSubject.asObservable();
   }
 
   constructor(private dataService: DataService) {

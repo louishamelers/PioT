@@ -1,7 +1,7 @@
 <div *ngFor="let plant of plantService.getPlants"
      class="plant-row"
      matRipple
-     (click)="plantService.setPlantSubject = plant"
+     (click)="plantService.plantPropertiesRaw = plant"
       matDialogClose>
   {{plant.plantName}}
 </div>

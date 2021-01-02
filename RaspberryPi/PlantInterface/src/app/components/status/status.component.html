@@ -1,14 +1,14 @@
-<div [ngSwitch]="healthService.plantStatus | async">
-  <div *ngSwitchCase="healthService.statuses.Dry" class="status">
+<div [ngSwitch]="plantService.plantStatus | async">
+  <div *ngSwitchCase="plantService.statuses.Dry" class="status">
     <img class="plant-icon" src="assets/images/plant-healthy.svg" alt="plant-healthy">
-    <p class="status-text">Your plant is looking DRY!</p>
+    <p class="status-text">Your <b>{{(plantService.plantProperties  | async).plantName}}</b> is looking DRY!</p>
   </div>
-  <div *ngSwitchCase="healthService.statuses.Cold" class="status">
+  <div *ngSwitchCase="plantService.statuses.Cold" class="status">
     <img class="plant-icon" src="assets/images/plant-healthy.svg" alt="plant-healthy">
-    <p class="status-text">Your plant is looking COLD!</p>
+    <p class="status-text">Your <b>{{(plantService.plantProperties  | async).plantName}}</b> is looking COLD!</p>
   </div>
   <div *ngSwitchDefault class="status">
     <img class="plant-icon" src="assets/images/plant-healthy.svg" alt="plant-healthy">
-    <p class="status-text">Your plant is looking good!</p>
+    <p class="status-text">Your <b>{{(plantService.plantProperties  | async).plantName}}</b> is looking good!</p>
   </div>
 </div>
