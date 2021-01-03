@@ -3,6 +3,13 @@ from machine import ADC, Pin
 import time
 import pycom
 
+"""
+A collection of sensors. Currently implemented are:
+    - humidity
+    - temperature
+    - soil moisture
+"""
+
 analog_counter = 0
 
 

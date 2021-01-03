@@ -5,6 +5,11 @@ import config
 import pycom
 import time
 
+"""
+Initialize three out of four sensors and register them in the data source.
+Then start a node that connects to the LoRa WAN, sending data in an interval.
+"""
+
 
 if __name__ == "__main__":
     pycom.heartbeat(False)
@@ -16,7 +21,7 @@ if __name__ == "__main__":
     light = RandomSensor(min=0, max=100)
 
     # Create data source
-    ds = DataSource(debug=True)
+    ds = DataSource()
     ds.add_getter(dht11.temperature, name='temperature')
     ds.add_getter(dht11.humidity, name='humidity')
     ds.add_getter(soilMoisture.read, name='soilMoisture')
@@ -27,6 +32,7 @@ if __name__ == "__main__":
         nwk_swkey=config.nwk_swkey,
         app_swkey=config.app_swkey,
         data_source=ds,
-        interval=5
+        interval=5,
+        debug=True
     )
     node.start()

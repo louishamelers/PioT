@@ -1,5 +1,9 @@
 import uos
 
+"""
+Some util functions
+"""
+
 
 def to_percentage(value, min, max):
     percentage = 100 * ((value - min) / (max - min))

@@ -1,11 +1,15 @@
 import struct
 
+"""
+Collects getter method references to combine their values into one dict when asked.
+Also provides the capability of encoding the data.
+"""
+
 
 class DataSource:
-    def __init__(self, debug=False):
+    def __init__(self):
         self.getters = {}
         self.names = []
-        self.debug = debug
 
     def add_getter(self, getter, name):
         if name not in self.names:
@@ -20,8 +24,6 @@ class DataSource:
         measurements = {}
         for name, getter in self.getters.items():
             measurements[name] = getter()
-        if self.debug:
-            print(measurements)
         return measurements
 
     # encode all measurements with 2 bytes each

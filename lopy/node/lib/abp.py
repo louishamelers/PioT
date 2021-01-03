@@ -5,8 +5,16 @@ import struct
 import time
 
 
+"""
+Activation by personalization (ABP) node to connect to a LoRa WAN gateway.
+Provided a data source, it gets the data and sends it every interval (defualt 10s).
+"""
+
+
 class ABPNode:
-    def __init__(self, dev_addr, nwk_swkey, app_swkey, data_source, interval=10):
+    def __init__(self, dev_addr, nwk_swkey, app_swkey, data_source, interval=10, debug=False):
+        self.debug = debug
+
         self.data_source = data_source
         self.interval = interval
 
@@ -46,10 +54,12 @@ class ABPNode:
         while (self.running):
             # Get data from sensors...
             data = self.data_source.get_encoded_data()
+            if self.debug:
+                print('Sending data:', data)
 
             # Send data to gateway
             s.setblocking(False)
-            print('Sending data:', data)
+
             s.send(data)
             s.setblocking(True)
 
