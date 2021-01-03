@@ -3,24 +3,23 @@ import struct
 
 class DataSource:
     def __init__(self, debug=False):
-        self.sensors = {}
+        self.getters = {}
         self.names = []
         self.debug = debug
 
-    def add_sensor(self, sensor, name):
+    def add_getter(self, getter, name):
         if name not in self.names:
-            self.sensors[name] = sensor
+            self.getters[name] = getter
             self.names.append(name)
 
-    def remove_sensor(self, name):
+    def remove_getter(self, name):
         if name in self.names:
-            self.sensors.pop(name)
+            self.getters.pop(name)
 
     def get_data(self):
-        print('Getting data...')
         measurements = {}
-        for name, sensor in self.sensors.items():
-            measurements[name] = sensor.read()
+        for name, getter in self.getters.items():
+            measurements[name] = getter()
         if self.debug:
             print(measurements)
         return measurements

@@ -1,6 +1,5 @@
-from data.source import DataSource
-from sensors.moisture import MoistureSensor
-from sensors.random import RandomSensor
+from data_source import DataSource
+from sensors import MoistureSensor, DHT11, RandomSensor
 from abp import ABPNode
 import config
 import pycom
@@ -12,22 +11,16 @@ if __name__ == "__main__":
     pycom.rgbled(0x123123)
 
     # Create sensors
-    temperature = RandomSensor(min=-10, max=30)
-    humidity = RandomSensor(min=0, max=100)
+    dht11 = DHT11('P23')
     soilMoisture = MoistureSensor(pin='P13', dry=3550, wet=1300)
     light = RandomSensor(min=0, max=100)
 
-    # Create data source (class that reads and combines all data)
+    # Create data source
     ds = DataSource(debug=True)
-    ds.add_sensor(temperature, name='temperature')
-    ds.add_sensor(humidity, name='humidity')
-    ds.add_sensor(soilMoisture, name='soilMoisture')
-    ds.add_sensor(light, name='light')
-
-    # while True:
-    #     m = ds.get_data()
-    #     print(m)
-    #     time.sleep(1)
+    ds.add_getter(dht11.temperature, name='temperature')
+    ds.add_getter(dht11.humidity, name='humidity')
+    ds.add_getter(soilMoisture.read, name='soilMoisture')
+    ds.add_getter(light.read, name='light')
 
     node = ABPNode(
         dev_addr=config.dev_addr,
