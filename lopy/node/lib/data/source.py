@@ -2,9 +2,10 @@ import struct
 
 
 class DataSource:
-    def __init__(self):
+    def __init__(self, debug=False):
         self.sensors = {}
         self.names = []
+        self.debug = debug
 
     def add_sensor(self, sensor, name):
         if name not in self.names:
@@ -16,9 +17,12 @@ class DataSource:
             self.sensors.pop(name)
 
     def get_data(self):
+        print('Getting data...')
         measurements = {}
         for name, sensor in self.sensors.items():
             measurements[name] = sensor.read()
+        if self.debug:
+            print(measurements)
         return measurements
 
     # encode all measurements with 2 bytes each

@@ -18,7 +18,7 @@ if __name__ == "__main__":
     light = RandomSensor(min=0, max=100)
 
     # Create data source (class that reads and combines all data)
-    ds = DataSource()
+    ds = DataSource(debug=True)
     ds.add_sensor(temperature, name='temperature')
     ds.add_sensor(humidity, name='humidity')
     ds.add_sensor(soilMoisture, name='soilMoisture')
@@ -34,6 +34,6 @@ if __name__ == "__main__":
         nwk_swkey=config.nwk_swkey,
         app_swkey=config.app_swkey,
         data_source=ds,
-        interval=30
+        interval=5
     )
     node.start()
