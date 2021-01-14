@@ -1,15 +1,16 @@
 import { Injectable } from '@angular/core';
 import {DataService, SensorData} from './data.service';
 import {BehaviorSubject, Observable} from 'rxjs';
-import {combineLatest} from "rxjs";
+import {combineLatest} from 'rxjs';
+import * as io from 'socket.io-client';
 
 // static plant types & settings
 export interface PlantProperties {
-  plantName: string,
-  prefHumidity: number,
-  prefLight: number,
-  prefSoilMoisture: number,
-  prefTemperature: number
+  plantName: string;
+  prefHumidity: number;
+  prefLight: number;
+  prefSoilMoisture: number;
+  prefTemperature: number;
 }
 export const PLANT_PROPERTIES: PlantProperties[] = [
   {
@@ -36,17 +37,27 @@ export const PLANT_PROPERTIES: PlantProperties[] = [
 ];
 
 export interface PlantStatus {
-  status: string,
+  status: string;
   message: string;
+  action?: () => void;
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class PlantService {
-  public readonly healthyStatus: PlantStatus = {status: 'healthy', message: ''}
+  private socket = io.io('127.0.0.1:3000');
+  public lights = false;
+  public readonly healthyStatus: PlantStatus = {
+    status: 'healthy',
+    message: '',
+    action: () => {
+      this.socket.emit('lights', false);
+      this.lights = false;
+    }
+  };
   private readonly healthSubject: BehaviorSubject<PlantStatus> = new BehaviorSubject<PlantStatus>(this.healthyStatus);
-  private readonly plantSubject: BehaviorSubject<PlantProperties> = new BehaviorSubject<PlantProperties>(PLANT_PROPERTIES[0])
+  private readonly plantSubject: BehaviorSubject<PlantProperties> = new BehaviorSubject<PlantProperties>(PLANT_PROPERTIES[0]);
 
   public get getPlants(): PlantProperties[] {
     return PLANT_PROPERTIES;
@@ -65,64 +76,78 @@ export class PlantService {
   }
 
   constructor(private dataService: DataService) {
+    this.plantStatus.subscribe(status => {
+      if (typeof status?.action === 'function') {
+        status?.action();
+      }
+    });
     combineLatest([
       dataService.sensorData,
       this.plantSubject
     ]).subscribe(([data, plant]: [SensorData, PlantProperties]) => {
       const margin = .2;
 
-      if (data.humidity[9] > plant.prefHumidity + margin) {
+      if (data.light[9] > plant.prefLight + margin) {
+        const status = {
+          status: 'bright',
+          message: 'Close the curtains.',
+          action: () => {
+            this.socket.emit('lights', false);
+            this.lights = false;
+            console.log('ligts');
+          }
+        };
+        this.healthSubject.next(status);
+      } else if (data.light[9] < plant.prefLight - margin) {
+        const status = {
+          status: 'dark',
+          message: 'Open the curtains',
+          action: () => {
+            this.socket.emit('lights', true);
+            this.lights = true;
+            console.log('ligtson');
+          }
+        };
+        this.healthSubject.next(status);
+      }else if (data.humidity[9] > plant.prefHumidity + margin) {
         const status = {
           status: 'moist',
           message: 'Make the air dryer.'
-        }
+        };
         this.healthSubject.next(status);
       } else if (data.humidity[9] < plant.prefHumidity - margin) {
         const status = {
           status: 'dry',
           message: 'Make the air more moist.'
-        }
-        this.healthSubject.next(status);
-      } else if (data.light[9] > plant.prefLight + margin) {
-        const status = {
-          status: 'bright',
-          message: 'Close the curtains.'
-        }
-        this.healthSubject.next(status);
-      } else if (data.light[9] < plant.prefLight - margin) {
-        const status = {
-          status: 'dark',
-          message: 'Open the curtains'
-        }
+        };
         this.healthSubject.next(status);
       } else if (data.soilMoisture[9] > plant.prefSoilMoisture + margin) {
         const status = {
           status: 'moist',
           message: 'Don\'t give your plant water.'
-        }
+        };
         this.healthSubject.next(status);
       } else if (data.soilMoisture[9] < plant.prefSoilMoisture - margin) {
         const status = {
           status: 'thirsty',
           message: 'Give your plant some water.'
-        }
+        };
         this.healthSubject.next(status);
       } else if (data.temperature[9] > plant.prefTemperature + margin) {
         const status = {
           status: 'hot',
           message: 'Open a window.'
-        }
+        };
         this.healthSubject.next(status);
       } else if (data.temperature[9] < plant.prefTemperature - margin) {
         const status = {
           status: 'cold',
           message: 'Close the windows.'
-        }
+        };
         this.healthSubject.next(status);
       } else {
         this.healthSubject.next(this.healthyStatus);
       }
-
-    })
+    });
   }
 }
