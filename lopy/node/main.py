@@ -4,6 +4,7 @@ from abp import ABPNode
 import config
 import pycom
 import time
+import ubinascii
 
 """
 Initialize three out of four sensors and register them in the data source.
@@ -11,9 +12,16 @@ Then start a node that connects to the LoRa WAN, sending data in an interval.
 """
 
 
+def onData(data):
+    # print('data', data)
+    if data == bytes([0x00]):
+        pycom.rgbled(0x000000)
+    elif data == bytes([0x01]):
+        pycom.rgbled(0x442200)
+
+
 if __name__ == "__main__":
     pycom.heartbeat(False)
-    pycom.rgbled(0x123123)
 
     # Create sensors
     dht11 = DHT11('P23')
@@ -32,7 +40,7 @@ if __name__ == "__main__":
         nwk_swkey=config.nwk_swkey,
         app_swkey=config.app_swkey,
         data_source=ds,
-        interval=5,
-        debug=True
+        interval=1 * 60,
+        onData=onData
     )
     node.start()
