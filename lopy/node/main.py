@@ -1,5 +1,5 @@
 from data_source import DataSource
-from sensors import MoistureSensor, DHT11, RandomSensor
+from sensors import MoistureSensor, DHT11, RandomSensor, GY30
 from abp import ABPNode
 import config
 import pycom
@@ -13,11 +13,13 @@ Then start a node that connects to the LoRa WAN, sending data in an interval.
 
 
 def onData(data):
-    # print('data', data)
-    if data == bytes([0x00]):
+    print('Data:', data)
+    if data == b'1':
+        print('Turning light on')
+        pycom.rgbled(0xFFAA00)
+    elif data == b'0':
+        print('Turning light off')
         pycom.rgbled(0x000000)
-    elif data == bytes([0x01]):
-        pycom.rgbled(0x442200)
 
 
 if __name__ == "__main__":
@@ -26,21 +28,21 @@ if __name__ == "__main__":
     # Create sensors
     dht11 = DHT11('P23')
     soilMoisture = MoistureSensor(pin='P13', dry=3550, wet=1300)
-    light = RandomSensor(min=0, max=100)
+    light = GY30()
 
     # Create data source
     ds = DataSource()
-    ds.add_getter(dht11.temperature, name='temperature')
-    ds.add_getter(dht11.humidity, name='humidity')
-    ds.add_getter(soilMoisture.read, name='soilMoisture')
-    ds.add_getter(light.read, name='light')
+    ds.add(getter=dht11.temperature, name='temperature', encoding='decimal')
+    ds.add(getter=dht11.humidity, name='humidity', encoding='decimal')
+    ds.add(getter=soilMoisture.read, name='soilMoisture', encoding='decimal')
+    ds.add(getter=light.read, name='light', encoding='integer')
 
     node = ABPNode(
         dev_addr=config.dev_addr,
         nwk_swkey=config.nwk_swkey,
         app_swkey=config.app_swkey,
         data_source=ds,
-        interval=1 * 60,
+        interval=5,
         onData=onData
     )
     node.start()
