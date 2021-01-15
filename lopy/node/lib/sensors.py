@@ -1,7 +1,8 @@
-from util import bits_to_bytes, random_int, to_percentage
-from machine import ADC, Pin
 import time
 import pycom
+import ubinascii
+from machine import I2C, ADC, Pin
+from util import bits_to_bytes, random_int, to_percentage
 
 """
 A collection of sensors. Currently implemented are:
@@ -100,6 +101,24 @@ class DHT11:
     def humidity(self):
         self.__measure()
         return self.__humidity
+
+
+GY30_ADDRESS = 0x23
+GY30_CONTINUOUS_HIGH_RES_MODE = 0x10
+
+DEFAULT_SDA = 'P9'
+DEFAULT_SCL = 'P10'
+
+
+class GY30:
+    def __init__(self, sda=DEFAULT_SDA, scl=DEFAULT_SCL):
+        self.i2c = I2C(0, pins=(sda, scl))
+        self.i2c.init(I2C.MASTER)
+        self.i2c.writeto(GY30_ADDRESS, GY30_CONTINUOUS_HIGH_RES_MODE)
+
+    def read(self):
+        data = self.i2c.readfrom(GY30_ADDRESS, 2)
+        return int(ubinascii.hexlify(data), 16)
 
 
 class RandomSensor:
