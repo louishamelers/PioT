@@ -46,7 +46,7 @@ export interface PlantStatus {
   providedIn: 'root'
 })
 export class PlantService {
-  private socket = io.io('127.0.0.1:3000');
+  private socket = io.io('192.168.1.100:3000');
   public lights = false;
   public readonly healthyStatus: PlantStatus = {
     status: 'healthy',
@@ -87,59 +87,60 @@ export class PlantService {
     ]).subscribe(([data, plant]: [SensorData, PlantProperties]) => {
       const margin = .2;
 
-      if (data.light[9] > plant.prefLight + margin) {
+      if (data.light[9] / 100 > plant.prefLight + margin) {
+        console.log(data.light[9]);
+        console.log(plant.prefLight);
+        console.log(plant.prefLight + margin);
         const status = {
           status: 'bright',
           message: 'Close the curtains.',
           action: () => {
             this.socket.emit('lights', false);
             this.lights = false;
-            console.log('ligts');
           }
         };
         this.healthSubject.next(status);
-      } else if (data.light[9] < plant.prefLight - margin) {
+      } else if (data.light[9] / 100 < plant.prefLight - margin) {
         const status = {
           status: 'dark',
           message: 'Open the curtains',
           action: () => {
             this.socket.emit('lights', true);
             this.lights = true;
-            console.log('ligtson');
           }
         };
         this.healthSubject.next(status);
-      }else if (data.humidity[9] > plant.prefHumidity + margin) {
+      }else if (data.humidity[9] / 100 > plant.prefHumidity + margin) {
         const status = {
           status: 'moist',
           message: 'Make the air dryer.'
         };
         this.healthSubject.next(status);
-      } else if (data.humidity[9] < plant.prefHumidity - margin) {
+      } else if (data.humidity[9] / 100 < plant.prefHumidity - margin) {
         const status = {
           status: 'dry',
           message: 'Make the air more moist.'
         };
         this.healthSubject.next(status);
-      } else if (data.soilMoisture[9] > plant.prefSoilMoisture + margin) {
+      } else if (data.soilMoisture[9] / 100 > plant.prefSoilMoisture + margin) {
         const status = {
           status: 'moist',
           message: 'Don\'t give your plant water.'
         };
         this.healthSubject.next(status);
-      } else if (data.soilMoisture[9] < plant.prefSoilMoisture - margin) {
+      } else if (data.soilMoisture[9] / 100 < plant.prefSoilMoisture - margin) {
         const status = {
           status: 'thirsty',
           message: 'Give your plant some water.'
         };
         this.healthSubject.next(status);
-      } else if (data.temperature[9] > plant.prefTemperature + margin) {
+      } else if (data.temperature[9] / 100 > plant.prefTemperature + margin) {
         const status = {
           status: 'hot',
           message: 'Open a window.'
         };
         this.healthSubject.next(status);
-      } else if (data.temperature[9] < plant.prefTemperature - margin) {
+      } else if (data.temperature[9] / 100 < plant.prefTemperature - margin) {
         const status = {
           status: 'cold',
           message: 'Close the windows.'
