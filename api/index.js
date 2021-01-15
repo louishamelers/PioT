@@ -10,6 +10,10 @@ var client  = mqtt.connect('mqtt://eu.thethings.network', {
     password: 'ttn-account-v2.BmgSn0RYmHUlyNtJ79Ew73sTfoW4qgIG8db_cWuhWwM'
 })
 
+
+/**
+ * On init subscribe to the topic
+ */
 client.on('connect', function () {
   client.subscribe('iot-plant-solution/devices/lopy-tom/up', function (err) {
       if (err) {
@@ -18,40 +22,64 @@ client.on('connect', function () {
   })
 })
 
+
+/**
+ * On a uplink data event, send it trough to frontend
+ */
+
 client.on('message', function (topic, message) {
   this.lekker = message;
   const jsonMessage = JSON.parse(message.toString());
-  console.log(jsonMessage);
+  // console.log(jsonMessage);
   io.emit('sensor-data', jsonMessage);
 })
 
-io.on('actuate', function(data) {
-  console.log(data);
-});
+/**
+ * On command from frontend send it trough to TheThingsNetwork 
+ */
 
 io.on('connection', function(socket) {
   console.log('A user connected');
   socket.on('lights', function(data) {
     console.log(data);
-    // client.publish("iot-plant-solution/devices/lopy-tom/down", true);
+    const message = { 
+      port: 1,
+      confirmed: false,
+      schedule: 'replace'
+    }
+    message.payload_raw = Buffer.from(JSON.stringify(data)).toString('base64');
+
+    client.publish("iot-plant-solution/devices/lopy-tom/down", JSON.stringify(message));
   });
 })
 
-setInterval(function() {
-  console.log('publishing');
-  // prepare RAW payload and convert to base64
-  var payload_raw = Buffer.alloc(2, 0);
-  payload_raw[1] = 0x03; // command for this application
-  var buf = payload_raw.toString('base64');
 
-  // other method
-  var buf = Buffer.from(JSON.stringify({'lights': true}));
 
-  //or just plain
-  // var buf = true;
 
-  client.publish("iot-plant-solution/devices/lopy-tom", 'buf');
-}, 3000)
+
+
+
+
+
+
+
+
+
+
+
+// setInterval(function() {
+  
+//   console.log('publishing');
+//   const message = { 
+//     port: 1,
+//     confirmed: false,
+//     schedule: 'replace'
+//   }
+
+//   message.payload_raw = Buffer.from(JSON.stringify(1)).toString('base64');
+
+//   client.publish("iot-plant-solution/devices/lopy-tom/down", JSON.stringify(message));
+// }, 15000)
 
 
 // // TTN downliank settings

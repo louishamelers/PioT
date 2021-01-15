@@ -15,10 +15,10 @@ export interface PlantProperties {
 export const PLANT_PROPERTIES: PlantProperties[] = [
   {
     plantName: 'Cactus',
-    prefHumidity: 0.8,
-    prefLight: 0.6,
-    prefSoilMoisture: 0.6,
-    prefTemperature: 0.7
+    prefHumidity: 50,
+    prefLight: 200,
+    prefSoilMoisture: 20,
+    prefTemperature: 23
   },
   {
     plantName: 'Fern',
@@ -52,8 +52,8 @@ export class PlantService {
     status: 'healthy',
     message: '',
     action: () => {
-      this.socket.emit('lights', false);
-      this.lights = false;
+      this.socket.emit('lights', 1);
+      this.lights = true;
     }
   };
   private readonly healthSubject: BehaviorSubject<PlantStatus> = new BehaviorSubject<PlantStatus>(this.healthyStatus);
@@ -85,65 +85,87 @@ export class PlantService {
       dataService.sensorData,
       this.plantSubject
     ]).subscribe(([data, plant]: [SensorData, PlantProperties]) => {
+      console.log(data);
       const margin = .2;
 
-      if (data.light[9] / 100 > plant.prefLight + margin) {
-        console.log(data.light[9]);
-        console.log(plant.prefLight);
-        console.log(plant.prefLight + margin);
+      if (data.light[9] > plant.prefLight * (1 + margin)) {
         const status = {
           status: 'bright',
           message: 'Close the curtains.',
           action: () => {
-            this.socket.emit('lights', false);
+            this.socket.emit('lights', 0);
             this.lights = false;
           }
         };
         this.healthSubject.next(status);
-      } else if (data.light[9] / 100 < plant.prefLight - margin) {
+      } else if (data.light[9] < plant.prefLight - (plant.prefLight * margin)) {
         const status = {
           status: 'dark',
           message: 'Open the curtains',
           action: () => {
-            this.socket.emit('lights', true);
-            this.lights = true;
+            this.socket.emit('lights', 0);
+            this.lights = false;
           }
         };
         this.healthSubject.next(status);
-      }else if (data.humidity[9] / 100 > plant.prefHumidity + margin) {
+      }else if (data.humidity[9] > plant.prefHumidity * (1 + margin)) {
         const status = {
           status: 'moist',
-          message: 'Make the air dryer.'
+          message: 'Make the air dryer.',
+          action: () => {
+            this.socket.emit('lights', 0);
+            this.lights = false;
+          }
         };
         this.healthSubject.next(status);
-      } else if (data.humidity[9] / 100 < plant.prefHumidity - margin) {
+      } else if (data.humidity[9] < plant.prefHumidity - (plant.prefHumidity * margin)) {
         const status = {
           status: 'dry',
-          message: 'Make the air more moist.'
+          message: 'Make the air more moist.',
+          action: () => {
+            this.socket.emit('lights', 0);
+            this.lights = false;
+          }
         };
         this.healthSubject.next(status);
-      } else if (data.soilMoisture[9] / 100 > plant.prefSoilMoisture + margin) {
+      } else if (data.soilMoisture[9] > plant.prefSoilMoisture * (1 + margin)) {
         const status = {
           status: 'moist',
-          message: 'Don\'t give your plant water.'
+          message: 'Don\'t give your plant water.',
+          action: () => {
+            this.socket.emit('lights', 0);
+            this.lights = false;
+          }
         };
         this.healthSubject.next(status);
-      } else if (data.soilMoisture[9] / 100 < plant.prefSoilMoisture - margin) {
+      } else if (data.soilMoisture[9] < plant.prefSoilMoisture - (plant.prefSoilMoisture * margin)) {
         const status = {
           status: 'thirsty',
-          message: 'Give your plant some water.'
+          message: 'Give your plant some water.',
+          action: () => {
+            this.socket.emit('lights', 0);
+            this.lights = false;
+          }
         };
         this.healthSubject.next(status);
-      } else if (data.temperature[9] / 100 > plant.prefTemperature + margin) {
+      } else if (data.temperature[9] > plant.prefTemperature * (1 + margin)) {
         const status = {
           status: 'hot',
-          message: 'Open a window.'
+          message: 'Open a window.',
+          action: () => {
+            this.socket.emit('lights', 0);
+            this.lights = false;
+          }
         };
         this.healthSubject.next(status);
-      } else if (data.temperature[9] / 100 < plant.prefTemperature - margin) {
+      } else if (data.temperature[9] < plant.prefTemperature - (plant.prefTemperature * margin)) {
         const status = {
           status: 'cold',
-          message: 'Close the windows.'
+          message: 'Close the windows.',
+          action: () => {
+            this.socket.emit('lights', 0);
+            this.lights = false;
+          }
         };
         this.healthSubject.next(status);
       } else {
