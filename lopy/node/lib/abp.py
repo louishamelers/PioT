@@ -3,6 +3,7 @@ import socket
 import ubinascii
 import struct
 import time
+import select
 
 
 """
@@ -12,8 +13,8 @@ Provided a data source, it gets the data and sends it every interval (defualt 10
 
 
 class ABPNode:
-    def __init__(self, dev_addr, nwk_swkey, app_swkey, data_source, interval=10, debug=False):
-        self.debug = debug
+    def __init__(self, dev_addr, nwk_swkey, app_swkey, data_source, interval=10, onData=None):
+        self.onData = onData
 
         self.data_source = data_source
         self.interval = interval
@@ -51,17 +52,20 @@ class ABPNode:
         s = self.socket
         self.running = True
 
+        poller = select.poll()
+        poller.register(s, select.POLLIN)
+
         while (self.running):
             # Get data from sensors...
             data = self.data_source.get_encoded_data()
-            if self.debug:
-                print('Sending data:', data)
+            # print('Sending data:', data)
 
             # Send data to gateway
+            s.setblocking(True)
+            s.send(data)
             s.setblocking(False)
 
-            s.send(data)
-            s.setblocking(True)
+            data = s.recv(64)
+            self.onData(data)
 
-            # Wait n minutes
             time.sleep(self.interval)
